@@ -1,0 +1,168 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { ChevronLeft, Search, Calendar, SlidersHorizontal, Plus, X } from "lucide-react"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Calendar as CalendarComponent } from "@/components/ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
+import { format } from "date-fns"
+import { cn } from "@/lib/utils"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useDebounce } from "@/hooks/use-debounce"
+import { useEffect } from "react"
+
+export default function StoryHeader() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+
+  const [search, setSearch] = useState(searchParams.get("search") || "")
+  const [date, setDate] = useState<Date | undefined>(
+    searchParams.get("startDate") ? new Date(searchParams.get("startDate") as string) : undefined,
+  )
+  const [category, setCategory] = useState(searchParams.get("category") || "")
+
+  const debouncedSearch = useDebounce(search, 500)
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (debouncedSearch) {
+      params.set("search", debouncedSearch)
+    } else {
+      params.delete("search")
+    }
+
+    router.push(`/stories?${params.toString()}`)
+  }, [debouncedSearch, router, searchParams])
+
+  const handleDateSelect = (date: Date | undefined) => {
+    setDate(date)
+
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (date) {
+      params.set("startDate", format(date, "yyyy-MM-dd"))
+    } else {
+      params.delete("startDate")
+      params.delete("endDate")
+    }
+
+    router.push(`/stories?${params.toString()}`)
+  }
+
+  const handleCategoryChange = (value: string) => {
+    setCategory(value)
+
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (value) {
+      params.set("category", value)
+    } else {
+      params.delete("category")
+    }
+
+    router.push(`/stories?${params.toString()}`)
+  }
+
+  const clearFilters = () => {
+    setSearch("")
+    setDate(undefined)
+    setCategory("")
+    router.push("/stories")
+  }
+
+  const hasFilters = search || date || category
+
+  return (
+    <div>
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon">
+            <ChevronLeft className="h-5 w-5" />
+          </Button>
+          <h1 className="text-xl font-semibold">Stories</h1>
+        </div>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-lg">
+            <span className="text-xs text-gray-500">account type</span>
+            <span className="text-sm font-medium">Akshito Patel</span>
+            <Avatar className="h-8 w-8">
+              <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
+              <AvatarFallback>AP</AvatarFallback>
+            </Avatar>
+          </div>
+        </div>
+      </div>
+      <div className="mt-6 flex items-center justify-between gap-4">
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
+          <Input
+            placeholder="Search..."
+            className="pl-10 bg-white dark:bg-gray-800"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn("bg-white dark:bg-gray-800", date && "border-indigo-500 text-indigo-500")}
+              >
+                <Calendar className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="end">
+              <CalendarComponent mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
+            </PopoverContent>
+          </Popover>
+
+          <Popover>
+            <PopoverTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className={cn("bg-white dark:bg-gray-800", category && "border-indigo-500 text-indigo-500")}
+              >
+                <SlidersHorizontal className="h-4 w-4" />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-56" align="end">
+              <div className="space-y-4">
+                <h4 className="font-medium text-sm">Filter by Category</h4>
+                <Select value={category} onValueChange={handleCategoryChange}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All Categories</SelectItem>
+                    <SelectItem value="BUSINESS">Business</SelectItem>
+                    <SelectItem value="Politics">Politics</SelectItem>
+                    <SelectItem value="Technology">Technology</SelectItem>
+                    <SelectItem value="Design">Design</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </PopoverContent>
+          </Popover>
+
+          {hasFilters && (
+            <Button variant="outline" size="icon" onClick={clearFilters} className="bg-white dark:bg-gray-800">
+              <X className="h-4 w-4" />
+            </Button>
+          )}
+
+          <Button className="bg-indigo-900 hover:bg-indigo-800" onClick={() => router.push("/stories/new")}>
+            <Plus className="h-4 w-4 mr-2" />
+            Add New Story
+          </Button>
+        </div>
+      </div>
+    </div>
+  )
+}
