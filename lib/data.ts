@@ -94,14 +94,18 @@ export async function getStories(filters: StoryFilter = {}): Promise<Story[]> {
 
   // Apply status filter
   if (filters.status && filters.status !== "All") {
-    filteredStories = filteredStories.filter((story) => story.status === filters.status)
+    filteredStories = filteredStories.filter((story) => 
+      story.status.toLowerCase() === filters.status?.toLowerCase()
+    )
   }
 
   // Apply search filter
   if (filters.search) {
     const searchLower = filters.search.toLowerCase()
     filteredStories = filteredStories.filter(
-      (story) => story.title.toLowerCase().includes(searchLower) || story.category.toLowerCase().includes(searchLower),
+      (story) => 
+        story.title.toLowerCase().includes(searchLower) || 
+        (story.category && story.category.toLowerCase().includes(searchLower)),
     )
   }
 
@@ -117,7 +121,8 @@ export async function getStories(filters: StoryFilter = {}): Promise<Story[]> {
   // Apply category filter
   if (filters.category) {
     filteredStories = filteredStories.filter(
-      (story) => story.category.toLowerCase() === filters.category?.toLowerCase(),
+      (story) => story.category && 
+        story.category.toLowerCase() === filters.category?.toLowerCase(),
     )
   }
 

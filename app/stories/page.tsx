@@ -18,14 +18,22 @@ export default async function StoriesPage({
 }: {
   searchParams: SearchParams
 }) {
-  const { status, search, startDate, endDate, category } = searchParams
-  const stories = await getStories({ status, search, startDate, endDate, category })
+  // Create a safe filters object
+  const filters = {
+    status: searchParams.status,
+    search: searchParams.search,
+    startDate: searchParams.startDate,
+    endDate: searchParams.endDate,
+    category: searchParams.category
+  }
+  
+  const stories = await getStories(filters)
 
   return (
     <div className="p-6">
       <StoryHeader />
       <div className="mt-6">
-        <StoryTabs activeTab={status || "All"} />
+        <StoryTabs activeTab={searchParams.status || "All"} />
       </div>
       <div className="mt-6">
         <Suspense fallback={<StoryGridSkeleton />}>
