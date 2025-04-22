@@ -74,7 +74,7 @@ function StoryCard({
           src={story.image || "/placeholder.svg?height=250&width=400"}
           alt={story.title}
           width={400}
-          height={250}
+          height={350}
           className="w-full h-48 object-cover"
         />
         <div className="absolute top-2 right-2 flex gap-1">
