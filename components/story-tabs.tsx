@@ -1,15 +1,14 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 
 interface StoryTabsProps {
-  activeTab: string
+  activeTab?: string
 }
 
-export default function StoryTabs({ activeTab }: StoryTabsProps) {
+export default function StoryTabs({ activeTab = "All" }: StoryTabsProps) {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
   const tabs = [
     { name: "All", count: 4500 },
@@ -20,15 +19,14 @@ export default function StoryTabs({ activeTab }: StoryTabsProps) {
   ]
 
   const handleTabChange = (tabName: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-
+    // Simple navigation without search params
     if (tabName === "All") {
-      params.delete("status")
+      router.push("/stories")
     } else {
-      params.set("status", tabName)
+      // This is simplified - you may want to handle this differently
+      // since we're removing search params functionality
+      router.push(`/stories?tab=${tabName}`)
     }
-
-    router.push(`/stories?${params.toString()}`)
   }
 
   return (

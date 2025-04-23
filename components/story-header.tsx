@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { ChevronLeft, Search, Calendar, SlidersHorizontal, Plus, X } from "lucide-react"
@@ -11,68 +11,27 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { format } from "date-fns"
 import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useDebounce } from "@/hooks/use-debounce"
-import { useEffect } from "react"
 import MobileSidebar from "./mobile-sidebar"
 
 export default function StoryHeader() {
   const router = useRouter()
-  const searchParams = useSearchParams()
 
-  const [search, setSearch] = useState(searchParams.get("search") || "")
-  const [date, setDate] = useState<Date | undefined>(
-    searchParams.get("startDate") ? new Date(searchParams.get("startDate") as string) : undefined,
-  )
-  const [category, setCategory] = useState(searchParams.get("category") || "")
-
-  const debouncedSearch = useDebounce(search, 500)
-
-  useEffect(() => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (debouncedSearch) {
-      params.set("search", debouncedSearch)
-    } else {
-      params.delete("search")
-    }
-
-    router.push(`/stories?${params.toString()}`)
-  }, [debouncedSearch, router, searchParams])
+  const [search, setSearch] = useState("")
+  const [date, setDate] = useState<Date | undefined>(undefined)
+  const [category, setCategory] = useState("")
 
   const handleDateSelect = (date: Date | undefined) => {
     setDate(date)
-
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (date) {
-      params.set("startDate", format(date, "yyyy-MM-dd"))
-    } else {
-      params.delete("startDate")
-      params.delete("endDate")
-    }
-
-    router.push(`/stories?${params.toString()}`)
   }
 
   const handleCategoryChange = (value: string) => {
     setCategory(value)
-
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (value && value !== "ALL") {
-      params.set("category", value)
-    } else {
-      params.delete("category")
-    }
-
-    router.push(`/stories?${params.toString()}`)
   }
 
   const clearFilters = () => {
     setSearch("")
     setDate(undefined)
     setCategory("")
-    router.push("/stories")
   }
 
   const hasFilters = search || date || category
@@ -85,14 +44,16 @@ export default function StoryHeader() {
             <MobileSidebar />
           </div>
           <Button variant="ghost" size="icon" className="hidden md:flex">
-            <ChevronLeft className="h-5 w-5" />
+            <ChevronLeft className="h-5 w-5 text-black" />
           </Button>
-          <h1 className="text-xl font-semibold">Stories</h1>
+          <h1 className="text-xl text-black font-semibold">Stories</h1>
         </div>
         <div className="flex items-center gap-2">
           <div className="hidden sm:flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-lg">
-            <span className="text-xs text-gray-500">account type</span>
-            <span className="text-sm font-medium">Akshito Patel</span>
+            <div className="flex flex-col items-start">
+            <span className="text-xs text-gray-500">Welcome back!</span>
+            <span className="text-sm font-medium text-black">Akshito Patel</span>
+            </div>
             <Avatar className="h-8 w-8">
               <AvatarImage src="/placeholder.svg?height=32&width=32" alt="User" />
               <AvatarFallback>AP</AvatarFallback>
@@ -110,7 +71,7 @@ export default function StoryHeader() {
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end text-black ">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -121,7 +82,7 @@ export default function StoryHeader() {
                 <Calendar className="h-4 w-4" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
+            <PopoverContent className="w-auto p-0 " align="end">
               <CalendarComponent mode="single" selected={date} onSelect={handleDateSelect} initialFocus />
             </PopoverContent>
           </Popover>
