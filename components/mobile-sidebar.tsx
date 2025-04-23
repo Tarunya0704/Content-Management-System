@@ -13,7 +13,7 @@ export default function MobileSidebar() {
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         <Button variant="ghost" size="icon" className="md:hidden">
-          <Menu className="h-5 w-5" />
+          <Menu className="h-5 w-5 text-black" />
           <span className="sr-only">Toggle Menu</span>
         </Button>
       </SheetTrigger>
