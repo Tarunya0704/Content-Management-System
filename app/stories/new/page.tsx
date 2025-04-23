@@ -51,20 +51,20 @@ export default function NewStoryPage() {
             <ChevronLeft className="h-5 w-5" />
           </Button>
         </Link>
-        <h1 className="text-2xl font-bold">Create New Story</h1>
+        <h1 className="text-2xl text-black font-bold">Create New Story</h1>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid gap-4">
           <div className="space-y-2">
-            <label htmlFor="title" className="text-sm font-medium">
+            <label htmlFor="title" className="text-sm text-black font-medium">
               Title
             </label>
             <Input id="title" name="title" placeholder="Enter story title" required />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="category" className="text-sm font-medium">
+            <label htmlFor="category" className="text-sm  text-black font-medium">
               Category
             </label>
             <Select name="category" required>
@@ -72,16 +72,16 @@ export default function NewStoryPage() {
                 <SelectValue placeholder="Select category" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="BUSINESS">Business</SelectItem>
-                <SelectItem value="Politics">Politics</SelectItem>
-                <SelectItem value="Technology">Technology</SelectItem>
-                <SelectItem value="Design">Design</SelectItem>
+                <SelectItem value="BUSINESS" className="text-black">Business</SelectItem>
+                <SelectItem value="Politics" className="text-black">Politics</SelectItem>
+                <SelectItem value="Technology"className="text-black">Technology</SelectItem>
+                <SelectItem value="Design"className="text-black">Design</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="status" className="text-sm font-medium">
+            <label htmlFor="status" className="text-sm text-black font-medium">
               Status
             </label>
             <Select name="status" defaultValue="Draft">
@@ -89,29 +89,29 @@ export default function NewStoryPage() {
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="Draft">Draft</SelectItem>
-                <SelectItem value="Pending">Pending</SelectItem>
-                <SelectItem value="Published">Published</SelectItem>
+                <SelectItem value="Draft"className="text-black">Draft</SelectItem>
+                <SelectItem value="Pending"className="text-black">Pending</SelectItem>
+                <SelectItem value="Published"className="text-black">Published</SelectItem>
               </SelectContent>
             </Select>
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="content" className="text-sm font-medium">
+            <label htmlFor="content" className="text-sm text-black font-medium">
               Content
             </label>
             <Textarea id="content" name="content" placeholder="Write your story content here..." rows={10} required />
           </div>
 
           <div className="space-y-2">
-            <label htmlFor="featured" className="text-sm font-medium">
+            <label htmlFor="featured" className="text-sm font-medium text-black">
               Featured Tag (optional)
             </label>
             <Input id="featured" name="featured" placeholder="e.g., Top Story, Breaking News" />
           </div>
         </div>
 
-        <div className="flex justify-end gap-4">
+        <div className="flex justify-end gap-4 text-black">
           <Button type="button" variant="outline" onClick={() => router.push("/stories")}>
             Cancel
           </Button>

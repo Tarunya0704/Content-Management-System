@@ -75,7 +75,7 @@ export default function SidebarContent() {
           active={pathname === "/settings"}
         />
       </nav>
-      <div className="absolute bottom-0 w-full p-4">
+      <div className="bottom-0 w-full p-4">
         <Link
           href="/support"
           className="flex items-center gap-2 p-3 text-sm font-medium rounded-lg bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-100"
