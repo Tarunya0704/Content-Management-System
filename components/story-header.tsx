@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { useDebounce } from "@/hooks/use-debounce"
 import { useEffect } from "react"
+import MobileSidebar from "./mobile-sidebar"
 
 export default function StoryHeader() {
   const router = useRouter()
@@ -58,7 +59,7 @@ export default function StoryHeader() {
 
     const params = new URLSearchParams(searchParams.toString())
 
-    if (value) {
+    if (value && value !== "ALL") {
       params.set("category", value)
     } else {
       params.delete("category")
@@ -80,13 +81,16 @@ export default function StoryHeader() {
     <div>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="ghost" size="icon">
+          <div className="md:hidden">
+            <MobileSidebar />
+          </div>
+          <Button variant="ghost" size="icon" className="hidden md:flex">
             <ChevronLeft className="h-5 w-5" />
           </Button>
           <h1 className="text-xl font-semibold">Stories</h1>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-lg">
+          <div className="hidden sm:flex items-center gap-2 bg-white dark:bg-gray-800 px-3 py-1 rounded-lg">
             <span className="text-xs text-gray-500">account type</span>
             <span className="text-sm font-medium">Akshito Patel</span>
             <Avatar className="h-8 w-8">
@@ -96,17 +100,17 @@ export default function StoryHeader() {
           </div>
         </div>
       </div>
-      <div className="mt-6 flex items-center justify-between gap-4">
-        <div className="relative flex-1">
+      <div className="mt-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="relative flex-1 w-full">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-500" />
           <Input
             placeholder="Search..."
-            className="pl-10 bg-white dark:bg-gray-800"
+            className="pl-10 bg-white dark:bg-gray-800 w-full"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
           />
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-end">
           <Popover>
             <PopoverTrigger asChild>
               <Button
@@ -159,7 +163,8 @@ export default function StoryHeader() {
 
           <Button className="bg-indigo-900 hover:bg-indigo-800" onClick={() => router.push("/stories/new")}>
             <Plus className="h-4 w-4 mr-2" />
-            Add New Story
+            <span className="hidden sm:inline">Add New Story</span>
+            <span className="sm:hidden">Add</span>
           </Button>
         </div>
       </div>

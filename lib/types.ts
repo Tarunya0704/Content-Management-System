@@ -4,7 +4,7 @@ export interface Story {
   image: string
   category: string
   date: string
-  status: "Published" | "Draft" | "Pending" | "Archived"
+  status: string
   views: number
   featured?: string
   content?: string
