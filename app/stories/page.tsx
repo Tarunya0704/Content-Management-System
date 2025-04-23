@@ -2,13 +2,10 @@ import { Suspense } from "react"
 import StoryHeader from "@/components/story-header"
 import StoryTabs from "@/components/story-tabs"
 import StoryGrid from "@/components/story-grid"
-import { getStories } from "@/lib/data" 
+import { stories } from "@/lib/data"
 import { Skeleton } from "@/components/ui/skeleton"
 
-export default async function StoriesPage() {
-  // Fetch stories without any filters
-  const stories = await getStories({})
-
+export default function StoriesPage() {
   return (
     <div className="p-6 pt-0 md:pt-6">
       <StoryHeader />
